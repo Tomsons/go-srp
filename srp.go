@@ -206,11 +206,16 @@ type Verifier struct {
 // Verifier generates a password verifier for user I and passphrase p
 // in the environment 's'. It returns an instance of Verifier that holds the
 // parameters needed for a future authentication.
-func (s *SRP) Verifier(I, p []byte) (*Verifier, error) {
+func (s *SRP) Verifier(I, p, sel []byte) (*Verifier, error) {
 	ih := s.hashbyte(I)
 	ph := s.hashbyte(p)
 	pf := s.pf
-	salt := randbytes(pf.n)
+	var salt []byte
+	if len(sel) == 0 {
+		salt = randbytes(pf.n)
+	} else {
+		salt = sel
+	}
 	x := s.hashint(ih, ph, salt)
 	r := big.NewInt(0).Exp(pf.g, x, pf.N)
 

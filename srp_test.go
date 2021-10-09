@@ -43,7 +43,7 @@ func newUserDB(user, pass []byte, p int) (*userdb, error) {
 		return nil, err
 	}
 
-	v, err := s.Verifier(user, pass)
+	v, err := s.Verifier(user, pass, make([]byte, 0))
 	if err != nil {
 		return nil, err
 	}
