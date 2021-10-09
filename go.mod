@@ -1,4 +1,4 @@
-module github.com/Tomsons/go-srp
+module github.com/tomsons/go-srp
 
 go 1.13
 
