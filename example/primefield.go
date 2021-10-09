@@ -10,7 +10,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/opencoff/go-srp"
+	"github.com/tomsons/go-srp"
 	"os"
 	"strconv"
 )

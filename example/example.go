@@ -7,7 +7,7 @@ package main
 import (
 	"crypto/subtle"
 	"fmt"
-	"github.com/opencoff/go-srp"
+	"github.com/tomsons/go-srp"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	v, err := s.Verifier(i, pass)
+	v, err := s.Verifier(i, pass, []byte{})
 	if err != nil {
 		panic(err)
 	}
