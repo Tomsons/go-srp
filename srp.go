@@ -542,7 +542,7 @@ func UnmarshalServer(s string) (*Server, error) {
 }
 
 // NewServer constructs a Server instance for computing a shared secret.
-func (s *SRP) NewServer(v *Verifier, A *big.Int) (*Server, error) {
+func (s *SRP) NewServer(v *Verifier, A *big.Int, PB *big.Int) (*Server, error) {
 
 	pf := s.pf
 
@@ -566,12 +566,16 @@ func (s *SRP) NewServer(v *Verifier, A *big.Int) (*Server, error) {
 	// u := H(A, B)
 	// S := (Av^u) ^ b
 	// K := H(S)
-
-	b := randBigInt(pf.n * 8)
-	k := s.hashint(pf.N.Bytes(), pad(pf.g, pf.n))
-	t0 := big.NewInt(0).Mul(k, sx.v)
-	t0.Add(t0, big.NewInt(0).Exp(pf.g, b, pf.N))
-	B := t0.Mod(t0, pf.N)
+	var B *big.Int
+	if PB != nil {
+		B = PB
+	} else {
+		b := randBigInt(pf.n * 8)
+		k := s.hashint(pf.N.Bytes(), pad(pf.g, pf.n))
+		t0 := big.NewInt(0).Mul(k, sx.v)
+		t0.Add(t0, big.NewInt(0).Exp(pf.g, b, pf.N))
+		B = t0.Mod(t0, pf.N)
+	}
 
 	u := s.hashint(pad(A, pf.n), pad(B, pf.n))
 	if u.Cmp(zero) == 0 {
